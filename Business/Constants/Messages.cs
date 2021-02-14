@@ -23,5 +23,6 @@ namespace Business.Constants
 
         public static string InvalidUser = "UserId sıfır ya da boş değer içermemeli";
         public static string NotRentCar = "Bu aracı kiralayamazsınız.";
+        public static string InvalidBrand = "Geçersiz marka adı";
     }
 }

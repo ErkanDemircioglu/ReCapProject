@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Business.Constants;
+using Core.Utilities;
+using Brand = Entities.Concrete.Brand;
 
 namespace Business.Concrete
 {
@@ -17,47 +20,61 @@ namespace Business.Concrete
             _brandDal = brandDal;
         }
 
-        public void Add(Brand brand)
+        public IResult Add(Brand brand)
         {
             if (brand.Name.Length >= 2)
             {
                 _brandDal.Add(brand);
+                return new SuccessResult(Messages.Added);
             }
             else
             {
-                throw new Exception("Araba ismi 2 karakter olamaz");
+                return new ErrorResult();
             }
 
         }
 
-        public void Delete(Brand brand)
+        public IResult Delete(Brand brand)
         {
             _brandDal.Delete(brand);
+            return new SuccessResult(Messages.Deleted);
         }
 
-        public Brand Get(int id)
+        public IDataResult<Brand>  Get(int id)
         {
-            return _brandDal.Get(b => b.Id == id);
+            return new SuccessDataResult<Brand>(_brandDal.Get(b => b.Id == id));
         }
 
-        public List<Brand> GetAll()
+        public IDataResult<List<Brand>>  GetAll()
         {
-            return _brandDal.GetAll();
+            return new SuccessDataResult<List<Brand>>(_brandDal.GetAll()); 
         }
 
-        public void Update(Brand brand)
+        public IResult Update(Brand brand)
         {
             _brandDal.Update(brand);
+            return new SuccessResult(Messages.Updated);
         }
 
-        public Brand GetByBrand(string marka)
+        public IDataResult<Brand>  GetByBrand(string marka)
         {
-            return _brandDal.GetAll(b=>b.Name.Contains(marka)).FirstOrDefault();
+            var result= _brandDal.GetAll(b=>b.Name.Contains(marka)).FirstOrDefault();
+            if (result!=null)
+            {
+                return new SuccessDataResult<Brand>(result);
+            }
+            return new ErrorDataResult<Brand>(Messages.InvalidBrand);
         }
 
-        public List<Brand> GetByBrand2(string marka)
+        public IDataResult<List<Brand>>  GetByBrand2(string marka)
         {
-            return _brandDal.GetAll(b => b.Name.Contains(marka));
+            var result= _brandDal.GetAll(b => b.Name.Contains(marka));
+           
+            if (result.Count>0)
+            {
+                return new SuccessDataResult<List<Brand>>(result,Messages.List);
+            }
+            return new ErrorDataResult<List<Brand>>(Messages.InvalidBrand);
         }
     }
 }

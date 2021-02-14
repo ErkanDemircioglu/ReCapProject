@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Business.Constants;
+using Core.Utilities;
 
 namespace Business.Concrete
 {
@@ -17,34 +19,37 @@ namespace Business.Concrete
             _colorDal = colorDal;
         }
 
-        public Color Get(int id)
+        public IDataResult<Color>  Get(int id)
         {
-            return _colorDal.Get(c => c.Id == id);
+            return new SuccessDataResult<Color>( _colorDal.Get(c => c.Id == id));
         }
 
-        public void Add(Color color)
+        public IResult Add(Color color)
         {
             _colorDal.Add(color);
+            return new SuccessResult(Messages.Added);
         }
 
-        public void Delete(Color color)
+        public IResult Delete(Color color)
         {
             _colorDal.Delete(color);
+            return new SuccessResult(Messages.Deleted);
         }
 
-        public List<Color> GetAll()
+        public IDataResult< List<Color>> GetAll()
         {
-            return _colorDal.GetAll();
+            return new SuccessDataResult<List<Color>>(_colorDal.GetAll()); 
         }
 
-        public void Update(Color color)
+        public IResult Update(Color color)
         {
             _colorDal.Update(color);
+            return new SuccessResult(Messages.Updated);
         }
 
-        public Color GetByColor(string renk)
+        public IDataResult<Color>  GetByColor(string renk)
         {
-            return _colorDal.GetAll(c => c.Name.Contains(renk)).FirstOrDefault();
+            return new SuccessDataResult<Color>(_colorDal.GetAll(c => c.Name.Contains(renk)).FirstOrDefault());
         }
     }
 }
