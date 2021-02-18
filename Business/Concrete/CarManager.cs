@@ -4,6 +4,8 @@ using System.Text;
 using System.Linq;
 using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -40,17 +42,12 @@ namespace Business.Concrete
             return new SuccessDataResult<Car>(_cardal.Get(c => c.Id == id),Messages.List);
         }
 
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {
-            if (car.DailyPrice > 0)
-            {
+       
                 _cardal.Add(car);
                 return new SuccessResult(Messages.Added);
-            }
-           
-                return new ErrorResult(Messages.LowPrice);
-             
-            
 
         }
 
