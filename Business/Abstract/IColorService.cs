@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 using System.Text;
 using Core.Utilities;
+using Core.Utilities.Results;
 
 namespace Business.Abstract
 {

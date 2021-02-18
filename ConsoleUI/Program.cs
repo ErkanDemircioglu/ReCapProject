@@ -173,7 +173,7 @@ namespace ConsoleUI
         {
             ColorManager colorManager = new ColorManager(new EfColorDal());
             var result = colorManager.GetAll();
-            foreach (var color in result)
+            foreach (var color in result.Data)
             {
                 Console.WriteLine(color.Id+" - "+color.Name);
             }
