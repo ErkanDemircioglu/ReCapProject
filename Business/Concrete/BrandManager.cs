@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
 using Core.Utilities;
 using Core.Utilities.Results;
 using Brand = Entities.Concrete.Brand;
@@ -21,18 +23,12 @@ namespace Business.Concrete
             _brandDal = brandDal;
         }
 
+        [ValidationAspect(typeof(BrandValidator))]
         public IResult Add(Brand brand)
         {
-            if (brand.Name.Length >= 2)
-            {
-                _brandDal.Add(brand);
+    
                 return new SuccessResult(Messages.Added);
-            }
-            else
-            {
-                return new ErrorResult();
-            }
-
+   
         }
 
         public IResult Delete(Brand brand)
