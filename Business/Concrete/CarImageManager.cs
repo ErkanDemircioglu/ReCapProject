@@ -46,6 +46,23 @@ namespace Business.Concrete
 
         public IResult UploadImage(int id, FileUpload objectFile,string path)
         {
+         
+            IResult result = BusinessRules.Run(CheckPhotoCount(id));
+            if (result != null)
+            {
+                return new ErrorResult();
+            }
+            CarImage carImage = new CarImage();
+            carImage.CarId = id;
+            carImage.Date = DateTime.Now;
+            carImage.ImagePath = ChangeNamePhoto(objectFile, path);
+            _carImageDal.Add(carImage);
+            return new SuccessResult();
+
+        }
+
+        private static string ChangeNamePhoto(FileUpload objectFile, string path)
+        {
             string photoName = string.Empty;
             string photoExtension = string.Empty;
 
@@ -57,7 +74,7 @@ namespace Business.Concrete
                 {
                     photoName = Guid.NewGuid() + photoExtension;
 
-                    
+
                     if (!Directory.Exists(path))
                     {
                         Directory.CreateDirectory(path);
@@ -74,19 +91,10 @@ namespace Business.Concrete
 
 
             }
-            IResult result = BusinessRules.Run(CheckPhotoCount(id));
-            if (result!=null)
-            {
-                return new ErrorResult();
-            }
-            CarImage carImage = new CarImage();
-            carImage.CarId = id;
-            carImage.Date = DateTime.Now;
-            carImage.ImagePath = photoName;
-            _carImageDal.Add(carImage);
-            return new SuccessResult();
 
+            return photoName;
         }
+
         private IResult CheckPhotoCount(int id)
         {
             var result = _carImageDal.GetAll(c => c.CarId == id).Count;
