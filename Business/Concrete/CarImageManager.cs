@@ -45,7 +45,7 @@ namespace Business.Concrete
             throw new NotImplementedException();
         }
 
-        public IResult UploadImage(int id, FileUpload objectFile,string path)
+        public IResult UploadImage(int id, IFormFile objectFile,string path)
         {
          
             IResult result = BusinessRules.Run(CheckPhotoCount(id));

@@ -37,7 +37,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult Add([FromForm] int carId,[FromForm] FileUpload objectFile)
+        public IActionResult Add([FromForm] int carId,[FromForm] IFormFile objectFile)
         {
 
             string path = _webHostEnvironment.WebRootPath + "\\images\\";

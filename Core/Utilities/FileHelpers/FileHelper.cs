@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -7,15 +8,15 @@ namespace Core.Utilities.FileHelpers
 {
     public class FileHelper
     {
-        public static string Add(FileUpload objectFile, string path)
+        public static string Add(IFormFile objectFile, string path)
         {
             string photoName = string.Empty;
             string photoExtension = string.Empty;
 
 
-            if (objectFile.files.Length > 0)
+            if (objectFile.Length > 0)
             {
-                photoExtension = Path.GetExtension(objectFile.files.FileName);
+                photoExtension = Path.GetExtension(objectFile.FileName);
                 if (photoExtension.ToLower() == ".jpg" || photoExtension.ToLower() == ".png")
                 {
                     photoName = Guid.NewGuid() + photoExtension;
@@ -28,7 +29,7 @@ namespace Core.Utilities.FileHelpers
 
                     using (FileStream fileStream = System.IO.File.Create(path + photoName))
                     {
-                        objectFile.files.CopyTo(fileStream);
+                        objectFile.CopyTo(fileStream);
                         fileStream.Flush();
 
                     }
