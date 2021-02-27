@@ -42,7 +42,6 @@ namespace WebAPI.Controllers
 
             string path = _webHostEnvironment.WebRootPath + "\\images\\";
             var result = _carImageService.UploadImage(carId,objectFile,path);
-
             if (result.Success)
             {
                 return Ok(result);
