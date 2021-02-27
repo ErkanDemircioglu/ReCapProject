@@ -1,4 +1,5 @@
-﻿using Core.Utilities.Results;
+﻿using Core.Utilities;
+using Core.Utilities.Results;
 using Entities.Concrete;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -11,7 +12,8 @@ namespace Business.Abstract
     {
         IDataResult<List<CarImage>> GetAll();
         IDataResult<CarImage> Get(int id);
-        IResult Delete(int id);
-        IResult UploadImage(int id,string photoName);
+        IResult Delete(CarImage carImage);
+        IResult UploadImage(int id, FileUpload objectFile,string path);
+        IResult Update(CarImage carImage);
     }
 }

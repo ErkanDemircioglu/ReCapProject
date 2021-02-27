@@ -37,38 +37,11 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult Add( int carId,[FromForm] FileUpload objectFile)
+        public IActionResult Add([FromForm] int carId,[FromForm] FileUpload objectFile)
         {
-            string photoName = string.Empty;
-            string photoExtension = string.Empty;
 
-            
-            if (objectFile.files.Length > 0)
-            {
-                photoExtension = Path.GetExtension(objectFile.files.FileName);
-                if (photoExtension.ToLower()==".jpg" || photoExtension.ToLower()==".png")
-                {
-                    photoName = Guid.NewGuid() + photoExtension;
-
-                    string path = _webHostEnvironment.WebRootPath + "\\images\\";
-                    if (!Directory.Exists(path))
-                    {
-                        Directory.CreateDirectory(path);
-                    }
-
-                    using (FileStream fileStream = System.IO.File.Create(path + photoName))
-                    {
-                        objectFile.files.CopyTo(fileStream);
-                        fileStream.Flush();
-
-                    }
-                  
-                }
-             
-       
-            }
-
-            var result = _carImageService.UploadImage(carId,photoName);
+            string path = _webHostEnvironment.WebRootPath + "\\images\\";
+            var result = _carImageService.UploadImage(carId,objectFile,path);
 
             if (result.Success)
             {
@@ -82,11 +55,12 @@ namespace WebAPI.Controllers
 
 
         [HttpPost("delete")]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(CarImage carImage)
         {
-            var result = _carImageService.Delete(id);
+            var result = _carImageService.Delete(carImage);
             if (result.Success)
             {
+                System.IO.File.Delete(_webHostEnvironment.WebRootPath + "\\images\\" + carImage.ImagePath);
                 return Ok(result);
             }
 
@@ -104,7 +78,18 @@ namespace WebAPI.Controllers
 
             return BadRequest(result);
         }
-        
-        
+        [HttpPost("update")]
+        public IActionResult Update(CarImage carImage)
+        { 
+            var result = _carImageService.Update(carImage);
+            if (result.Success)
+            {
+                
+                return Ok(result);
+            }
+
+            return BadRequest(result);
+        }
+
     }
 }

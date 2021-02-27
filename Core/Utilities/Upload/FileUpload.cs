@@ -9,5 +9,6 @@ namespace Core.Utilities
     public class FileUpload
     {
         public IFormFile files { get; set; }
+     
     }
 }
