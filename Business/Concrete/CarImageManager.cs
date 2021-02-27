@@ -2,6 +2,7 @@
 using Business.Constants;
 using Core.Utilities;
 using Core.Utilities.Business;
+using Core.Utilities.FileHelpers;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
@@ -55,45 +56,13 @@ namespace Business.Concrete
             CarImage carImage = new CarImage();
             carImage.CarId = id;
             carImage.Date = DateTime.Now;
-            carImage.ImagePath = ChangeNamePhoto(objectFile, path);
+            carImage.ImagePath = FileHelper.Add(objectFile, path);
             _carImageDal.Add(carImage);
             return new SuccessResult();
 
         }
 
-        private static string ChangeNamePhoto(FileUpload objectFile, string path)
-        {
-            string photoName = string.Empty;
-            string photoExtension = string.Empty;
-
-
-            if (objectFile.files.Length > 0)
-            {
-                photoExtension = Path.GetExtension(objectFile.files.FileName);
-                if (photoExtension.ToLower() == ".jpg" || photoExtension.ToLower() == ".png")
-                {
-                    photoName = Guid.NewGuid() + photoExtension;
-
-
-                    if (!Directory.Exists(path))
-                    {
-                        Directory.CreateDirectory(path);
-                    }
-
-                    using (FileStream fileStream = System.IO.File.Create(path + photoName))
-                    {
-                        objectFile.files.CopyTo(fileStream);
-                        fileStream.Flush();
-
-                    }
-
-                }
-
-
-            }
-
-            return photoName;
-        }
+    
 
         private IResult CheckPhotoCount(int id)
         {
