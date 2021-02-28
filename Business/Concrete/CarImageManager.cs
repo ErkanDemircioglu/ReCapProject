@@ -40,9 +40,19 @@ namespace Business.Concrete
 
         }
 
-        public IResult Update(CarImage carImage)
+        public IResult Update(CarImage carImage,IFormFile files,string path)
         {
-            throw new NotImplementedException();
+            IResult result = BusinessRules.Run(CheckPhotoCount(carImage.CarId));
+            if (result!=null)
+            {
+                return result;
+            }
+            CarImage carImage1 = new CarImage();
+            carImage1.CarId = carImage.CarId;
+            carImage1.Date = DateTime.Now;
+            carImage1.ImagePath = FileHelper.Update(files, path);
+            _carImageDal.Update(carImage1);
+            return new SuccessResult();
         }
 
         public IResult UploadImage(int id, IFormFile objectFile,string path)

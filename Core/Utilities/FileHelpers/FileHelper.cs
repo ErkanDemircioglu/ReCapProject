@@ -41,5 +41,38 @@ namespace Core.Utilities.FileHelpers
 
             return photoName;
         }
+        public static string Update(IFormFile files,string path)
+        {
+            string photoName = string.Empty;
+            string photoExtension = string.Empty;
+
+
+            if (files.Length > 0)
+            {
+                photoExtension = Path.GetExtension(files.FileName);
+                if (photoExtension.ToLower() == ".jpg" || photoExtension.ToLower() == ".png")
+                {
+                    photoName = Guid.NewGuid() + photoExtension;
+
+
+                    if (!Directory.Exists(path))
+                    {
+                        Directory.CreateDirectory(path);
+                    }
+
+                    using (FileStream fileStream = System.IO.File.Create(path + photoName))
+                    {
+                        files.CopyTo(fileStream);
+                        fileStream.Flush();
+
+                    }
+
+                }
+                File.Delete(files.FileName);
+
+            }
+
+            return photoName;
+        }
     }
 }

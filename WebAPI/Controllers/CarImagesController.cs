@@ -78,9 +78,10 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
         [HttpPost("update")]
-        public IActionResult Update(CarImage carImage)
-        { 
-            var result = _carImageService.Update(carImage);
+        public IActionResult Update([FromForm] CarImage carImage, [FromForm] IFormFile objectFile)
+        {
+            string path = _webHostEnvironment.WebRootPath + "\\images\\";
+            var result = _carImageService.Update(carImage,objectFile,path);
             if (result.Success)
             {
                 

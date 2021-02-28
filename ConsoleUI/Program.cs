@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using Business.Abstract;
 using Business.Concrete;
+using Core.Entities.Concrete;
 using DataAccess.Concrete.EntityFramework;
 using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
@@ -230,7 +231,7 @@ namespace ConsoleUI
             Console.WriteLine("Sifreniz");
             string sifre = Console.ReadLine();
 
-            var result = userManager.Add(new User {FirstName = ad,LastName =soyad,Email = email,Password = sifre});
+            var result = userManager.Add(new User {FirstName = ad,LastName =soyad,Email = email});
 
             if (result.Success)
             {

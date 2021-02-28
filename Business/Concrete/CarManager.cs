@@ -10,6 +10,7 @@ using Core.Utilities;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Business.BusinessAspects.Autofac;
 
 namespace Business.Concrete
 {
@@ -42,6 +43,7 @@ namespace Business.Concrete
             return new SuccessDataResult<Car>(_cardal.Get(c => c.Id == id),Messages.List);
         }
 
+        [SecuredOperation("Car.Add,admin")]
         [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
         {
