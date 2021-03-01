@@ -68,11 +68,11 @@ namespace Core.Utilities.FileHelpers
                     }
 
                 }
-                File.Delete(files.FileName);
+          
 
             }
 
-            return photoName;
+            return path+photoName;
         }
     }
 }

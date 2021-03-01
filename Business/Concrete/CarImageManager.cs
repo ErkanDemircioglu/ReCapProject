@@ -47,11 +47,14 @@ namespace Business.Concrete
             {
                 return result;
             }
-            CarImage carImage1 = new CarImage();
-            carImage1.CarId = carImage.CarId;
-            carImage1.Date = DateTime.Now;
-            carImage1.ImagePath = FileHelper.Update(files, path);
-            _carImageDal.Update(carImage1);
+
+            CarImage updatedCarImage = new CarImage();
+            updatedCarImage.Id = carImage.Id;
+            updatedCarImage.CarId = carImage.CarId;
+            updatedCarImage.Date = DateTime.Now;
+            updatedCarImage.ImagePath = FileHelper.Update(files, path);
+                
+            _carImageDal.Update(updatedCarImage);
             return new SuccessResult();
         }
 
