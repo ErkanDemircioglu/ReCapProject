@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Business.Abstract;
 using Business.Constants;
+using Core.Aspects.Autofac.Caching;
 using Core.Entities.Concrete;
 using Core.Utilities;
 using Core.Utilities.Results;
@@ -19,7 +20,7 @@ namespace Business.Concrete
         {
             _userDal = userDal;
         }
-
+       
         public IDataResult<List<User>> GetAll()
         {
             return new SuccessDataResult<List<User>>(_userDal.GetAll(),Messages.List);
@@ -60,12 +61,12 @@ namespace Business.Concrete
             _userDal.Delete(user);
             return new SuccessResult(Messages.Deleted);
         }
-
+       
         public List<OperationClaim> GetClaims(User user)
         {
             return _userDal.GetClaims(user);
         }
-
+    
         public User GetByMail(string email)
         {
             return _userDal.Get(u => u.Email == email);

@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Core.Aspects.Autofac.Caching;
 using Core.Utilities;
 using Core.Utilities.Business;
 using Core.Utilities.FileHelpers;
@@ -22,7 +23,7 @@ namespace Business.Concrete
         {
             _carImageDal = carImageDal;
         }
-
+        [CacheRemoveAspect("ICarImageService.Get")]
         public IResult Delete(CarImage carImage)
         {
             _carImageDal.Delete(carImage);
@@ -33,13 +34,13 @@ namespace Business.Concrete
         {
             return new SuccessDataResult<CarImage>(_carImageDal.Get(c => c.Id == id));
         }
-
+        [CacheAspect]
         public IDataResult<List<CarImage>> GetAll()
         {
             return new SuccessDataResult<List<CarImage>>(_carImageDal.GetAll());
 
         }
-
+        [CacheRemoveAspect("ICarImageService.Get")]
         public IResult Update(CarImage carImage,IFormFile files,string path)
         {
             IResult result = BusinessRules.Run(CheckPhotoCount(carImage.CarId));

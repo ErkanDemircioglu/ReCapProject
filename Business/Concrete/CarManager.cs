@@ -11,6 +11,9 @@ using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Business.BusinessAspects.Autofac;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Performance;
+using Core.Aspects.Autofac.Transaction;
 
 namespace Business.Concrete
 {
@@ -25,6 +28,9 @@ namespace Business.Concrete
        
         }
 
+        [CacheAspect]
+        [PerformanceAspect(10)]
+
         public IDataResult<List<Car>>  GetAll()
         {
             //if (DateTime.Now.DayOfWeek==DayOfWeek.Wednesday)
@@ -33,18 +39,20 @@ namespace Business.Concrete
             //}
             return new SuccessDataResult<List<Car>>(_cardal.GetAll(),Messages.List);
         }
-
+        [CacheAspect]
         public IDataResult<Car>  Get(int id)
         {
-            if (DateTime.Now.Hour==18)
+            if (id>0)
             {
                 return new ErrorDataResult<Car>(Messages.OutOfHours);
             }
             return new SuccessDataResult<Car>(_cardal.Get(c => c.Id == id),Messages.List);
         }
-
+        [CacheRemoveAspect("ICarService.Get")]
         [SecuredOperation("Car.Add,admin")]
         [ValidationAspect(typeof(CarValidator))]
+        [PerformanceAspect(5)]
+        [TransactionScopeAspect]
         public IResult Add(Car car)
         {
        
@@ -52,31 +60,31 @@ namespace Business.Concrete
                 return new SuccessResult(Messages.Added);
 
         }
-
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Update(Car car)
         {
             _cardal.Update(car);
            return  new SuccessResult(Messages.Updated);
         }
-
+        [CacheRemoveAspect("ICarService.Get")]
         public IResult Delete(Car car)
         {
             _cardal.Delete(car);
             return  new SuccessResult(Messages.Deleted);
         }
-
+        [CacheAspect]
         public IDataResult<List<Car>>  GetCarsByBrandId(int brandId)
         {
             
             return new SuccessDataResult<List<Car>>(_cardal.GetAll(c => c.BrandId == brandId).ToList(),Messages.List);
         }
-
+        [CacheAspect]
         public IDataResult<List<Car>>  GetCarsByColorId(int colorId)
         {
             
             return new SuccessDataResult<List<Car>>(_cardal.GetAll(c => c.ColorId == colorId).ToList(),Messages.List);
         }
-
+        [CacheAspect]
         public IDataResult<List<CarDetailDto>>  GetCarDetails()
         {
 

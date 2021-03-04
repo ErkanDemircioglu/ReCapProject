@@ -42,7 +42,7 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<AuthManager>().As<IAuthService>().SingleInstance();
             builder.RegisterType<JwtHelper>().As<ITokenHelper>().SingleInstance();
 
-            builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>();
+           
 
             var assembly = System.Reflection.Assembly.GetExecutingAssembly();
 

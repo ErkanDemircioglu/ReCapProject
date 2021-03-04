@@ -72,7 +72,7 @@ namespace Core.Utilities.FileHelpers
 
             }
 
-            return path+photoName;
+            return photoName;
         }
     }
 }
